@@ -12,66 +12,91 @@ $email = "";
 $name = "";
 $errors = array();
 
-//if user signup button
-if(isset($_POST['signup'])){
-    $name = mysqli_real_escape_string($con, $_POST['name']);
-    $email = mysqli_real_escape_string($con, $_POST['email']);
-    $password = mysqli_real_escape_string($con, $_POST['password']);
-    $cpassword = mysqli_real_escape_string($con, $_POST['cpassword']);
-    if($password !== $cpassword){
-        $errors['password'] = "Confirm password not matched!";
+    //if user signup button
+    if(isset($_POST['signup'])){
+        $name = mysqli_real_escape_string($con, $_POST['name']);
+        $email = mysqli_real_escape_string($con, $_POST['email']);
+        $password = mysqli_real_escape_string($con, $_POST['password']);
+        $cpassword = mysqli_real_escape_string($con, $_POST['cpassword']);
+        if($password !== $cpassword){
+            $errors['password'] = "Confirm password not matched!";
+        }
+        $email_check = "SELECT * FROM usertable WHERE email = '$email'";
+        $res = mysqli_query($con, $email_check);
+        if(mysqli_num_rows($res) > 0){
+            $errors['email'] = "Email that you have entered is already exist!";
+        }
+        if(count($errors) === 0){
+            $encpass = password_hash($password, PASSWORD_BCRYPT);
+            $code = rand(999999, 111111);
+            $status = "notverified";
+            $insert_data = "INSERT INTO usertable (name, email, password, code, status)
+                            values('$name', '$email', '$encpass', '$code', '$status')";
+            $data_check = mysqli_query($con, $insert_data);
+            if($data_check){
+                $mail = new PHPMailer(true);
+                $mail->isSMTP();// gửi mail SMTP
+                $mail->Host = 'smtp.gmail.com';// Set the SMTP server to send through
+                $mail->SMTPAuth = true;// Enable SMTP authentication
+                $mail->Username = 'lethiinga307@gmail.com';// SMTP username
+                $mail->Password = 'nga372001'; // SMTP password
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;// Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+                $mail->AddAddress($email);
+                $mail->Port = 587; // TCP port to connect to
+                $mail->CharSet = 'UTF-8';
+                $mail->isHTML(true);
+                $mail->Subject = 'Verification code for Register';
+                $message_body = '
+                <p>For verify your email address, enter this verification code when prompted: <b>'.$code.'</b>.</p>
+                <p>Sincerely,</p>
+                <p>Group 11</p>
+                ';
+                $mail->Body = $message_body;
+                if($mail->Send())
+                {
+                    $info = "We've sent a verification code to your email: ".$email;
+                    $_SESSION['info'] = $info;
+                    $_SESSION['email'] = $email;
+                    $_SESSION['password'] = $password;
+                    header('location: user-otp.php');
+                    exit();
+                }
+                else
+                {
+                    $errors['otp-error'] = "Failed while sending code!";
+                }
+
+            }else{
+                $errors['db-error'] = "Failed while inserting data into database!";
+            }
+        }
     }
-    $email_check = "SELECT * FROM usertable WHERE email = '$email'";
-    $res = mysqli_query($con, $email_check);
-    if(mysqli_num_rows($res) > 0){
-        $errors['email'] = "Email that you have entered is already exist!";
-    }
-    if(count($errors) === 0){
-        $encpass = password_hash($password, PASSWORD_BCRYPT);
-        $code = rand(999999, 111111);
-        $status = "notverified";
-        $insert_data = "INSERT INTO usertable (name, email, password, code, status)
-                        values('$name', '$email', '$encpass', '$code', '$status')";
-        $data_check = mysqli_query($con, $insert_data);
-        if($data_check){
-            $mail = new PHPMailer(true);
-            $mail->isSMTP();// gửi mail SMTP
-            $mail->Host = 'smtp.gmail.com';// Set the SMTP server to send through
-            $mail->SMTPAuth = true;// Enable SMTP authentication
-            $mail->Username = 'lethiinga307@gmail.com';// SMTP username
-            $mail->Password = 'nga372001'; // SMTP password
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;// Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
-            $mail->AddAddress($email);
-            $mail->Port = 587; // TCP port to connect to
-            $mail->CharSet = 'UTF-8';
-            $mail->isHTML(true);
-            $mail->Subject = 'Verification code for Register';
-            $message_body = '
-            <p>For verify your email address, enter this verification code when prompted: <b>'.$code.'</b>.</p>
-            <p>Sincerely,</p>
-            <p>Group 11</p>
-            ';
-            $mail->Body = $message_body;
-            if($mail->Send())
-            {
-                $info = "We've sent a verification code to your email: ".$email;
-                $_SESSION['info'] = $info;
-                $_SESSION['email'] = $email;
-                $_SESSION['password'] = $password;
-                header('location: user-otp.php');
-                exit();
+    if(isset($_POST['update'])){
+        $id = mysqli_real_escape_string($con, $_POST['id']);
+        $name = mysqli_real_escape_string($con, $_POST['name']);
+        $sex = mysqli_real_escape_string($con, $_POST['sex']);
+        $birthday = mysqli_real_escape_string($con, $_POST['birthday']);
+        $job = mysqli_real_escape_string($con, $_POST['job']);
+        $phone = mysqli_real_escape_string($con, $_POST['phone']);
+
+        $query = "UPDATE `usertable` SET
+        name = '$name',
+        sex = '$sex',
+        birthday = '$birthday',
+        job = '$job',
+        phone = '$phone' 
+        WHERE id = '$id'";
+
+        $result = mysqli_query($con, $query);
+        if($result){
+           header('location: home.php');
             }
             else
             {
-                $errors['otp-error'] = "Failed while sending code!";
+                echo "<script>alert('Lỗi')</script>";;
             }
 
-        }else{
-            $errors['db-error'] = "Failed while inserting data into database!";
-        }
     }
-
-}
     //if user click verification code submit button
     if(isset($_POST['check'])){
         $_SESSION['info'] = "";
@@ -89,7 +114,7 @@ if(isset($_POST['signup'])){
             if($update_res){
                 $_SESSION['name'] = $name;
                 $_SESSION['email'] = $email;
-                header('location: profile.php');
+                header('location: home.php');
                 exit();
             }else{
                 $errors['otp-error'] = "Failed while updating code!";
@@ -114,7 +139,7 @@ if(isset($_POST['signup'])){
                 if($status == 'verified'){
                   $_SESSION['email'] = $email;
                   $_SESSION['password'] = $password;
-                    header('location: profile.php');
+                    header('location: home.php');
                 }else{
                     $info = "It's look like you haven't still verify your email - $email";
                     $_SESSION['info'] = $info;
