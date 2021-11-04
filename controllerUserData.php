@@ -1,4 +1,11 @@
 <?php 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require 'phpmail/Exception.php';
+require 'phpmail/PHPMailer.php';
+require 'phpmail/SMTP.php';
 session_start();
 require "connection.php";
 $email = "";
@@ -27,20 +34,38 @@ if(isset($_POST['signup'])){
                         values('$name', '$email', '$encpass', '$code', '$status')";
         $data_check = mysqli_query($con, $insert_data);
         if($data_check){
-            $receiver = "$email";
-            $subject = "Email Verification Code";
-            $message = "Your verification code is $code";
-            $sender = "From: leson230401@gmail.com";
-            if(mail($receiver, $subject, $message, $sender)){
-                $info = "We've sent a verification code to your email - $email";
+            $mail = new PHPMailer(true);
+            $mail->isSMTP();// gửi mail SMTP
+            $mail->Host = 'smtp.gmail.com';// Set the SMTP server to send through
+            $mail->SMTPAuth = true;// Enable SMTP authentication
+            $mail->Username = 'lethiinga307@gmail.com';// SMTP username
+            $mail->Password = 'nga372001'; // SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;// Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+            $mail->AddAddress($email);
+            $mail->Port = 587; // TCP port to connect to
+            $mail->CharSet = 'UTF-8';
+            $mail->isHTML(true);
+            $mail->Subject = 'Verification code for Register';
+            $message_body = '
+            <p>For verify your email address, enter this verification code when prompted: <b>'.$code.'</b>.</p>
+            <p>Sincerely,</p>
+            <p>Group 11</p>
+            ';
+            $mail->Body = $message_body;
+            if($mail->Send())
+            {
+                $info = "We've sent a verification code to your email: ".$email;
                 $_SESSION['info'] = $info;
                 $_SESSION['email'] = $email;
                 $_SESSION['password'] = $password;
                 header('location: user-otp.php');
                 exit();
-            }else{
+            }
+            else
+            {
                 $errors['otp-error'] = "Failed while sending code!";
             }
+
         }else{
             $errors['db-error'] = "Failed while inserting data into database!";
         }
