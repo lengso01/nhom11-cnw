@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 04, 2021 lúc 04:51 PM
+-- Thời gian đã tạo: Th10 04, 2021 lúc 07:35 PM
 -- Phiên bản máy phục vụ: 10.4.20-MariaDB
 -- Phiên bản PHP: 7.3.29
 
@@ -39,6 +39,19 @@ CREATE TABLE `chatting` (
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `login_details`
+--
+
+CREATE TABLE `login_details` (
+  `login_details_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `last_activity` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `is_type` enum('no','yes') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `usertable`
 --
 
@@ -68,6 +81,12 @@ ALTER TABLE `chatting`
   ADD PRIMARY KEY (`chat_message_id`);
 
 --
+-- Chỉ mục cho bảng `login_details`
+--
+ALTER TABLE `login_details`
+  ADD PRIMARY KEY (`login_details_id`);
+
+--
 -- Chỉ mục cho bảng `usertable`
 --
 ALTER TABLE `usertable`
@@ -78,10 +97,22 @@ ALTER TABLE `usertable`
 --
 
 --
+-- AUTO_INCREMENT cho bảng `chatting`
+--
+ALTER TABLE `chatting`
+  MODIFY `chat_message_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT cho bảng `login_details`
+--
+ALTER TABLE `login_details`
+  MODIFY `login_details_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT cho bảng `usertable`
 --
 ALTER TABLE `usertable`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

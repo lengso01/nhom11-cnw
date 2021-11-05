@@ -41,7 +41,7 @@ if($email == false){
                                 <input class="form-control" type="number" name="otp" placeholder="Enter verification code" required>
                             </div>
                             <div class="form-group">
-                                <input class="form-control button btn btn-primary" type="submit" name="check" value="Submit">
+                                <input class="form-control button btn btn-primary" type="submit" name="check" value="Xác nhận">
                             </div>
                         </form>
                     </div>

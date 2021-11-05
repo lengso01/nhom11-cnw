@@ -1,7 +1,6 @@
 <?php 
 require_once "controllerUserData.php";
 
-$connect = new PDO("mysql:host=localhost;dbname=project", "root", "");
 $email = $_SESSION['email'];
 $password = $_SESSION['password'];
 if($email != false && $password != false){
@@ -36,19 +35,31 @@ $result = $statement->fetchAll();
 $output = '
 <table class="table table-bordered table-striped">
  <tr>
-  <td>Username</td>
-  <td>Status</td>
-  <td>Action</td>
+  <th width="55%">Tên người dùng</td>
+  <th width="20%">Trạng thái</td>
+  <th width="25%">Hành động</td>
  </tr>
 ';
 
 foreach($result as $row)
 {
+ $status = '';
+ $current_timestamp = strtotime(date("Y-m-d H:i:s") . '- 10 second');
+ $current_timestamp = date('Y-m-d H:i:s', $current_timestamp);
+ $user_last_activity = fetch_user_last_activity($fetch_info['id'], $connect);
+ if($user_last_activity > $current_timestamp)
+ {
+  $status = '<span class="text-online">Online</span>';
+ }
+ else
+ {
+  $status = '<span class="text-offline">Offline</span>';
+ }
  $output .= '
  <tr>
-  <td>'.$row['name'].'</td>
-  <td></td>
-  <td><button type="button" class="btn btn-info btn-xs start_chat" data-touserid="'.$row['id'].'" data-tousername="'.$row['name'].'">Start Chat</button></td>
+  <td><img src="image/default.png" style="width:25px; margin-right:10px">'.$row['name'].' '.count_unseen_message($row['id'], $fetch_info['id'], $connect).' '.fetch_is_type_status($row['id'], $connect).'</td>
+  <td>'.$status.'</td>
+  <td><button type="button" class="btn btn-info btn-xs start_chat" data-touserid="'.$row['id'].'" data-tousername="'.$row['name'].'">Trò chuyện</button></td>
  </tr>
  ';
 }
