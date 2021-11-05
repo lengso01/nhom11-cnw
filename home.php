@@ -1,56 +1,39 @@
 <?php require_once "controllerUserData.php"; ?>
-<?php 
+<?php
 $email = $_SESSION['email'];
 $password = $_SESSION['password'];
-if($email != false && $password != false){
+if ($email != false && $password != false)
+{
     $sql = "SELECT * FROM usertable WHERE email = '$email'";
     $run_Sql = mysqli_query($con, $sql);
-    if($run_Sql){
+    if ($run_Sql)
+    {
         $fetch_info = mysqli_fetch_assoc($run_Sql);
         $status = $fetch_info['status'];
         $code = $fetch_info['code'];
-        if($status == "verified"){
-            if($code != 0){
+        if ($status == "verified")
+        {
+            if ($code != 0)
+            {
                 header('Location: reset-code.php');
             }
-        }else{
+        }
+        else
+        {
             header('Location: user-otp.php');
         }
     }
-}else{
+}
+else
+{
     header('Location: login-user.php');
 }
 ?>
-<?php require_once "base/header.php"; ?>
-    <header class="mb-5"> 
-        <nav class="navbar align-items-center">
-        <a class="navbar-brand font-weight-bold" href="#">∞Infinity</a>
-        <div class="d-flex align-items-center">
-            <p class="mr-2 mb-0">Hello,<?php echo $fetch_info['name'] ?></p>
-            <a href="logout-user.php">Logout</a>
-        </div>
-    </nav>
-    <ul class="mt-3 nav justify-content-center">
-            <li class="nav-item">
-        <a class="nav-link active" href="home.php">Trang chủ</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="profile.php">Blog</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="chat.php">Chatting</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="appointment.php">Appointment</a>
-    </li>
-    <li class="nav-item ">
-        <form class="form-inline">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search on Infinity" aria-label="Search">
-            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
-        </form>
-    </li>
-    </ul>
-    </header>
+<?php require_once "base/header.php";
+        require_once "base/menu-main.php";
+ ?>
+
+
     <main>
         <div class="container">
             <div class="row">
@@ -62,7 +45,7 @@ if($email != false && $password != false){
                                 <div class="ml-3">
                                     <h5 class="my-0"><?php echo $fetch_info['name'] ?></h5>
                                     <p class="text-muted mb-0">
-                                        <a href="edit-profile.php?user_id=<?php echo $fetch_info['id'] ?>">Chỉnh sửa thông tin</a>                                             
+                                        <a href="edit-profile.php?user_id=<?php echo $fetch_info['u_id'] ?>">Chỉnh sửa thông tin</a>                                             
                                         </p> 
                                 </div>
                             </div>
@@ -77,7 +60,18 @@ if($email != false && $password != false){
                                   <div class="accordion-body">
                                     <p class="text-muted mb-2"><strong>Họ và tên :</strong> <span class="ms-2"><?php echo $fetch_info['name'] ?></span></p>
                                 
-                                    <p class="text-muted mb-2"><strong>Giới tính :</strong ><span class="ms-2"><?php echo $fetch_info['sex'] ?></span></p>
+                                    <p class="text-muted mb-2"><strong>Giới tính :</strong ><span class="ms-2">
+                                        <?php
+                                          if($fetch_info['sex'] == 1){
+                                            echo "Nam";
+                                          } elseif ($fetch_info['sex'] == 2) {
+                                              echo "Nữ";
+                                          }else{
+                                            echo "Không muốn tiết lộ";
+                                          }
+                                        ?>
+                                        
+                                    </span></p>
                                 
                                     <p class="text-muted mb-2"><strong>Ngày sinh :</strong> <span class="ms-2"><?php echo $fetch_info['birthday'] ?></span></p>
                                 
@@ -172,7 +166,7 @@ if($email != false && $password != false){
                             <!-- Story Box-->
                             <div class="border border-light p-2 mb-3">
                                 <div class="d-flex align-items-start">
-                                    <img class="me-2 avatar-sm rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar4.png" alt="Generic placeholder image">
+                                    <img class="me-2 avatar-sm rounded-circle" src="image/default2.png" alt="Generic placeholder image">
                                     <div class="w-100">
                                         <h6 class="">Nguyễn Thùy Linh <small class="text-muted"> 1 giờ trước</small></h6>
                                         <div class="">
@@ -187,7 +181,7 @@ if($email != false && $password != false){
 
                                 <div class="post-user-comment-box">
                                     <div class="d-flex align-items-start">
-                                        <img class="me-2 avatar-sm rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="Generic placeholder image">
+                                        <img class="me-2 avatar-sm rounded-circle" src="image/default1.png" alt="Generic placeholder image">
                                         <div class="w-100">
                                             <h6 class="mt-0">Trần Văn A <small class="text-muted">3 giờ trước</small></h6>
                                             Bài viết lại bổ ích quá
@@ -197,7 +191,7 @@ if($email != false && $password != false){
 
                                             <div class="d-flex align-items-start mt-3">
                                                 <a class="pe-2" href="#">
-                                                    <img src="https://bootdey.com/img/Content/avatar/avatar4.png" class="avatar-sm rounded-circle" alt="Generic placeholder image">
+                                                    <img src="image/default2.png" class="avatar-sm rounded-circle" alt="Generic placeholder image">
                                                 </a>
                                                 <div class="w-100">
                                                     <h6 class="mt-0">Vũ Đức Bo <small class="text-muted">5 giờ trước</small></h6>
@@ -209,7 +203,7 @@ if($email != false && $password != false){
 
                                     <div class="d-flex align-items-start mt-2">
                                         <a class="pe-2" href="#">
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle" alt="Generic placeholder image" height="31">
+                                            <img src="image/default.png" class="rounded-circle" alt="Generic placeholder image" height="31">
                                         </a>
                                         <div class="w-100">
                                             <input type="text" id="simpleinput" class="form-control border-0 form-control-sm" placeholder="Add comment">
@@ -226,7 +220,7 @@ if($email != false && $password != false){
                             <!-- Story Box-->
                             <div class="border border-light p-2 mb-3">
                                 <div class="d-flex align-items-start">
-                                    <img class="me-2 avatar-sm rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="Generic placeholder image">
+                                    <img class="me-2 avatar-sm rounded-circle" src="image/default3.png" alt="Generic placeholder image">
                                     <div class="w-100">
                                         <h5 class="m-0">Tomlinson</h5>
                                         <p class="text-muted"><small>about 2 phút trước</small></p>

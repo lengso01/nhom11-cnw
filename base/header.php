@@ -11,7 +11,6 @@
     <script type="text/javascript" src="js/index.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.0/css/all.min.css" />
     <link href='image/favicon.ico' rel='icon' type='image/x-icon'/>
-
-  
 </head>
 <body>
+       

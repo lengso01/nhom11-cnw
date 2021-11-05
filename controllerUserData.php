@@ -72,7 +72,7 @@ $errors = array();
         }
     }
     if(isset($_POST['update'])){
-        $id = mysqli_real_escape_string($con, $_POST['id']);
+        $u_id = mysqli_real_escape_string($con, $_POST['id']);
         $name = mysqli_real_escape_string($con, $_POST['name']);
         $sex = mysqli_real_escape_string($con, $_POST['sex']);
         $birthday = mysqli_real_escape_string($con, $_POST['birthday']);
@@ -85,7 +85,7 @@ $errors = array();
         birthday = '$birthday',
         job = '$job',
         phone = '$phone' 
-        WHERE id = '$id'";
+        WHERE u_id = '$u_id'";
 
         $result = mysqli_query($con, $query);
         if($result){
@@ -133,23 +133,32 @@ $errors = array();
         if(mysqli_num_rows($res) > 0){
             $fetch = mysqli_fetch_assoc($res);
             $fetch_pass = $fetch['password'];
+            $fetch_id = $fetch['u_id'];
             if(password_verify($password, $fetch_pass)){
                 $_SESSION['email'] = $email;
                 $status = $fetch['status'];
                 if($status == 'verified'){
                   $_SESSION['email'] = $email;
                   $_SESSION['password'] = $password;
-                    header('location: home.php');
+                  $sub_query = "
+                    INSERT INTO login_details 
+                    (user_id) 
+                    VALUES ('".$fetch_id."')
+                    ";
+                    $statement = $connect->prepare($sub_query);
+                    $statement->execute();
+                    $_SESSION['login_details_id'] = $connect->lastInsertId();
+                    header('location:home.php');
                 }else{
-                    $info = "It's look like you haven't still verify your email - $email";
+                    $info = "Có vẻ như bạn vẫn chưa xác minh email của mình: ".$email;
                     $_SESSION['info'] = $info;
                     header('location: user-otp.php');
                 }
             }else{
-                $errors['email'] = "Incorrect email or password!";
+                $errors['email'] = "Email hoặc mật khẩu không chính xác!";
             }
         }else{
-            $errors['email'] = "It's look like you're not yet a member! Click on the bottom link to signup.";
+            $errors['email'] = "Có vẻ như bạn chưa phải là thành viên! Nhấp vào liên kết dưới cùng để đăng ký.";
         }
     }
 
@@ -166,7 +175,7 @@ $errors = array();
                 $receiver = "$email";
                 $subject = "Password Reset Code";
                 $message = "Your password reset code is $code";
-                $sender = "From: leson230401@gmail.com";
+                $sender = "From: Group 11";
                 if(mail($receiver, $subject, $message, $sender)){
                     $info = "We've sent a passwrod reset otp to your email - $email";
                     $_SESSION['info'] = $info;
@@ -174,13 +183,13 @@ $errors = array();
                     header('location: reset-code.php');
                     exit();
                 }else{
-                    $errors['otp-error'] = "Failed while sending code!";
+                    $errors['otp-error'] = "Lỗi send";
                 }
             }else{
-                $errors['db-error'] = "Something went wrong!";
+                $errors['db-error'] = "Lỗi";
             }
         }else{
-            $errors['email'] = "This email address does not exist!";
+            $errors['email'] = "Địa chỉ email này không tồn tại!";
         }
     }
 
@@ -194,12 +203,12 @@ $errors = array();
             $fetch_data = mysqli_fetch_assoc($code_res);
             $email = $fetch_data['email'];
             $_SESSION['email'] = $email;
-            $info = "Please create a new password that you don't use on any other site.";
+            $info = "Vui lòng tạo một mật khẩu mới mà bạn không sử dụng trên bất kỳ trang web nào khác.";
             $_SESSION['info'] = $info;
             header('location: new-password.php');
             exit();
         }else{
-            $errors['otp-error'] = "You've entered incorrect code!";
+            $errors['otp-error'] = "Bạn đã nhập sai mã!";
         }
     }
 
@@ -209,7 +218,7 @@ $errors = array();
         $password = mysqli_real_escape_string($con, $_POST['password']);
         $cpassword = mysqli_real_escape_string($con, $_POST['cpassword']);
         if($password !== $cpassword){
-            $errors['password'] = "Confirm password not matched!";
+            $errors['password'] = "Xác nhận mật khẩu không khớp!";
         }else{
             $code = 0;
             $email = $_SESSION['email']; //getting this email using session
@@ -217,11 +226,11 @@ $errors = array();
             $update_pass = "UPDATE usertable SET code = $code, password = '$encpass' WHERE email = '$email'";
             $run_query = mysqli_query($con, $update_pass);
             if($run_query){
-                $info = "Your password changed. Now you can login with your new password.";
+                $info = "Mật khẩu của bạn đã thay đổi. Bây giờ bạn có thể đăng nhập bằng mật khẩu mới của mình.";
                 $_SESSION['info'] = $info;
                 header('Location: password-changed.php');
             }else{
-                $errors['db-error'] = "Failed to change your password!";
+                $errors['db-error'] = "Không thể thay đổi mật khẩu của bạn!";
             }
         }
     }
