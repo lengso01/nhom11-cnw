@@ -77,6 +77,8 @@ $errors = array();
         $sex = mysqli_real_escape_string($con, $_POST['sex']);
         $birthday = mysqli_real_escape_string($con, $_POST['birthday']);
         $job = mysqli_real_escape_string($con, $_POST['job']);
+                $address = mysqli_real_escape_string($con, $_POST['address']);
+
         $phone = mysqli_real_escape_string($con, $_POST['phone']);
 
         $query = "UPDATE `usertable` SET
@@ -84,6 +86,8 @@ $errors = array();
         sex = '$sex',
         birthday = '$birthday',
         job = '$job',
+                address = '$address',
+
         phone = '$phone' 
         WHERE u_id = '$u_id'";
 

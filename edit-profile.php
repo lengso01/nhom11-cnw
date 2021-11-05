@@ -26,7 +26,7 @@ if ($email != false && $password != false)
 }
 else
 {
-    header('Location: login-user.php');
+    header('Location: index.php');
 }
 
 if (!isset($_GET['user_id']) && $_GET['user_id'] == NULL)
@@ -57,7 +57,7 @@ else
               </div>
             </div>
             <div class="mb-3 row">
-              <label for="name" class="col-sm-3 col-form-label">Họ và tên</label>
+              <label for="name" class="col-sm-3 col-form-label"><i class="fas fa-file-signature"></i> Họ và tên</label>
               <div class="col-sm-9">
                 <input type="text" class="form-control" id="name" aria-describedby="nameVal" name="name" placeholder="<?php echo $fetch_info['name'] ?>" required>
                 <div id="nameVal" class="form-text">
@@ -66,7 +66,7 @@ else
               </div>
             </div>
             <div class="mb-3 row">
-              <label for="sex" class="col-sm-3 col-form-label">Giới tính</label>
+              <label for="sex" class="col-sm-3 col-form-label"><i class="far fa-user"></i> Giới tính</label>
               <div class="col-sm-9">
                 <select class="form-select" aria-label="Default select example" id="sex" name="sex">
                   <option value="1" selected>Nam</option>
@@ -76,19 +76,25 @@ else
               </div>
             </div>
             <div class="mb-3 row">
-              <label for="birthday" class="col-sm-3 col-form-label">Ngày sinh</label>
+              <label for="birthday" class="col-sm-3 col-form-label"><i class="fas fa-birthday-cake"></i> Ngày sinh</label>
               <div class="col-sm-9">
                 <input type="date" class="form-control" name="birthday" id="birthday" placeholder="<?php echo $fetch_info['birthday'] ?>">
               </div>
             </div>
             <div class="mb-3 row">
-              <label for="job" class="col-sm-3 col-form-label">Nghề nghiệp</label>
+              <label for="job" class="col-sm-3 col-form-label"><i class="fas fa-user-md"></i> Nghề nghiệp</label>
               <div class="col-sm-9">
                 <input type="text" class="form-control" id="job" aria-describedby="nameVal" name="job" placeholder="<?php echo $fetch_info['job'] ?>" required>
               </div>
             </div>
             <div class="mb-3 row">
-              <label for="phone" class="col-sm-3 col-form-label">Số điện thoại</label>
+              <label for="address" class="col-sm-3 col-form-label"><i class="fas fa-map-marker-alt"></i> Địa chỉ</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="address" aria-describedby="nameVal" name="address" placeholder="<?php echo $fetch_info['address'] ?>" required>
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label for="phone" class="col-sm-3 col-form-label"><i class="fas fa-phone"></i> Số điện thoại</label>
               <div class="col-sm-9">
                 <input type="text" class="form-control" id="phone" aria-describedby="nameVal" name="phone" placeholder="<?php echo $fetch_info['phone'] ?>" required>
               </div>

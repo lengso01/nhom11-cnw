@@ -17,9 +17,9 @@
         <a class="nav-link" href="appointment.php">Lời nhắc</a>
     </li>
     <li class="nav-item ">
-        <form class="form-inline">
-            <input class="form-control mr-sm-2 border-0" type="search" placeholder="Tìm kiếm" aria-label="Search">
-            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
+        <form class="form-inline" action="search.php" role="search" method="GET">
+            <input class="form-control mr-sm-2 border-0" type="search" name="s" placeholder="Tìm kiếm" aria-label="Search" value="">
+                        <button class="search-action btn btn-primary" type="submit" value="">Tìm kiếm</button>
         </form>
     </li>
     </ul>

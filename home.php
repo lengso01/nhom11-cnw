@@ -76,6 +76,7 @@ else
                                     <p class="text-muted mb-2"><strong>Ngày sinh :</strong> <span class="ms-2"><?php echo $fetch_info['birthday'] ?></span></p>
                                 
                                     <p class="text-muted mb-2"><strong>Nghề nghiệp:</strong> <span class="ms-2"><?php echo $fetch_info['job'] ?></span></p>
+                                    <p class="text-muted mb-2"><strong>Địa chỉ:</strong> <span class="ms-2"><?php echo $fetch_info['address'] ?></span></p>
 
                                     <p class="text-muted mb-2 "><strong>Phone :</strong> <span class="ms-2"><?php echo $fetch_info['phone'] ?></span></p>
                                   </div>

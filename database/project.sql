@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 05, 2021 lúc 04:25 AM
+-- Thời gian đã tạo: Th10 05, 2021 lúc 06:16 AM
 -- Phiên bản máy phục vụ: 10.4.20-MariaDB
 -- Phiên bản PHP: 7.3.29
 
@@ -61,9 +61,9 @@ INSERT INTO `login_details` (`login_details_id`, `user_id`, `last_activity`, `is
 (9, 9, '2021-11-05 03:03:13', 'no'),
 (10, 9, '2021-11-05 03:04:17', 'no'),
 (11, 9, '2021-11-05 03:04:51', 'no'),
-(12, 10, '2021-11-05 03:25:23', 'no'),
+(12, 10, '2021-11-05 03:54:32', 'no'),
 (13, 9, '2021-11-05 03:07:48', 'no'),
-(14, 9, '2021-11-05 03:25:23', 'no');
+(14, 9, '2021-11-05 03:39:07', 'no');
 
 -- --------------------------------------------------------
 
@@ -105,6 +105,7 @@ CREATE TABLE `usertable` (
   `sex` varchar(10) NOT NULL,
   `birthday` date NOT NULL,
   `job` varchar(100) NOT NULL,
+  `address` varchar(255) NOT NULL,
   `phone` varchar(10) NOT NULL,
   `group_id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -178,7 +179,7 @@ ALTER TABLE `post`
 -- AUTO_INCREMENT cho bảng `usertable`
 --
 ALTER TABLE `usertable`
-  MODIFY `u_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `u_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
