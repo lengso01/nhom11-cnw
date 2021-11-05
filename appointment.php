@@ -34,120 +34,69 @@ if($email != false && $password != false){
                 <div class="col-xl-6">
                     <h4 class="header-title mb-3"><i class="far fa-sticky-note"></i> Tạo lời nhắc</h4>
                     <div class="addapp" style="background: white;">
-                        <form>
+                        <form action="controllerSche.php?id=<?=$fetch_info['u_id']?>" method="POST">
                         <div class="mb-3">
-                            <label for="inputMain">Tiêu đề:</label>
-                            <input type="text" class="form-control" id="inputMain" placeholder="Import content...">
+                            <label for="sche_content">Nội dung:</label>
+                            <textarea type="text" class="form-control" name="sche_content" id="sche_content" placeholder="Nội dung..."></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="inputAddresss">Địa điểm:</label>
-                            <input type="text" class="form-control" id="inputAddress" placeholder="Address...">
+                            <input type="text" class="form-control" id="inputAddress" name="sche_address" placeholder="Địa chỉ">
                         </div>
                         <div class="mb-3">
                             <div class="row">
-                            <div class="form-group col-md-5">
+                            <div class="form-group col-md-6">
                             <label for="inputDate">Ngày</label>
-                            <input type="date" class="form-control" id="inputDate" placeholder="">
+                            <input type="date" class="form-control" name="sche_date" id="inputDate" placeholder="">
                             </div>
                             <div class="form-group col-md-2">Thời gian:</div>
                             <div class="form-group col-md-2">
                             <label for="inputTimestart">Bắt đầu</label>
-                            <input type="time" class="form-control" id="inputTimestart">
-                            </div>
-                            <div class="form-group col-md-1">
-                            <label for="">To</label>
+                            <input type="time" class="form-control" id="inputTimestart" name="sche_time_start">
                             </div>
                             <div class="form-group col-md-2">
                             <label for="inputTimeend">Kết thúc</label>
-                        </div>
+                            <input type="time" class="form-control" name="sche_time_end" id="inputTimesEnd" >
+
+                            </div>
                             </div>
                         </div>
-                        <div class="botton col-md-7">
-                            <button type="botton" class="btn btn-primary">Xác nhận</button>
+                     <div class="status mb-3">
+                                <select class="form-select" aria-label="Default select example" id="status" name="status">
+                                  <option value="0" selected>Quan trọng</option>
+                                  <option value="1">Bình thường</option>
+                                </select>
+                              </div>
+                        <div class="mb-3">
+                            <button type="botton" class="btn btn-primary" name="confirm">Xác nhận</button>
                         </div>
                         </form>
                                                 
                     </div> <!-- end card-->
                 </div>  
                 <div class="col-xl-6">
-                        <h4 class="header-title mb-3"><i class="mdi mdi-book ms-1"></i>Lịch hẹn</h4>
-                        <div class="list-group" style="background: white;">
-                        <a href="#" class="my-1">
+                        <h4 class="header-title mb-3">Lịch hẹn</h4>
+                        <div class="list-group">
                             <div class="d-flex align-items-start" id="tooltips-container">
-                                <div class="">
-                                    <i class="mdi mdi-circle h3 text-primary"></i>
-                                </div>
-                                <div class="w-100 ms-2">
-                                    <h5 class="mb-1 mt-0">Ví dụ 1</h5>
+                                 <?php $queryP = "
+                                    SELECT * FROM schedule ORDER BY id DESC
+                                 ";
+                                 $statement = $connect->prepare($queryP);
+                                 $statement->execute();
+                                 $resultP = $statement->fetchAll();
+                                 if ($resultP) {
+                                    foreach($resultP as $row)
+                                     { ?>
+                                <div class="w-100">
+                                    <h5 class="mb-1 mt-0"><?=$row['sche_content']?></h5>
                                     <ul class="list-inline text-muted font-12">
-                                        <li class="list-inline-item"><i class="mdi mdi-calendar-blank-outline me-1"></i>16/08/2020</li>
-                                        <li class="list-inline-item"> - </li>
-                                        <li class="list-inline-item"><i class="mdi mdi-clock-time-eight-outline me-1"></i>7H<span class="px-1">To</span>12H</li>
+                                        <li class="list-inline-item"><?=$row['sche_address']?></li>
+                                        <li class="list-inline-item"><?=$row['sche_date']?></li>
                                     </ul>
                                 </div>
+                            <?php } } ?>
                             </div>
-                        </a>
                     
-                        <a href="#" class="my-1">
-                            <div class="d-flex align-items-start" id="tooltips-container">
-                                <div class="">
-                                    <i class="mdi mdi-circle h3 text-pink"></i>
-                                </div>
-                               <div class="w-100 ms-2">
-                                    <h5 class="mb-1 mt-0">Ví dụ 2</h5>
-                                    <ul class="list-inline text-muted font-12">
-                                        <li class="list-inline-item"><i class="mdi mdi-calendar-blank-outline me-1"></i>16/08/2020</li>
-                                        <li class="list-inline-item"> - </li>
-                                        <li class="list-inline-item"><i class="mdi mdi-clock-time-eight-outline me-1"></i>7H<span class="px-1">To</span>12H</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="my-1">
-                            <div class="d-flex align-items-start" id="tooltips-container">
-                                <div class="">
-                                    <i class="mdi mdi-circle h3 text-success"></i>
-                                </div>
-                                 <div class="w-100 ms-2">
-                                    <h5 class="mb-1 mt-0">Ví dụ 3</h5>
-                                    <ul class="list-inline text-muted font-12">
-                                        <li class="list-inline-item"><i class="mdi mdi-calendar-blank-outline me-1"></i>16/08/2020</li>
-                                        <li class="list-inline-item"> - </li>
-                                        <li class="list-inline-item"><i class="mdi mdi-clock-time-eight-outline me-1"></i>7H<span class="px-1">To</span>12H</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="my-1">
-                            <div class="d-flex align-items-start" id="tooltips-container">
-                                <div class="">
-                                    <i class="mdi mdi-circle h3 text-warning"></i>
-                                </div>
-                                 <div class="w-100 ms-2">
-                                    <h5 class="mb-1 mt-0">Ví dụ 4</h5>
-                                    <ul class="list-inline text-muted font-12">
-                                        <li class="list-inline-item"><i class="mdi mdi-calendar-blank-outline me-1"></i>16/08/2020</li>
-                                        <li class="list-inline-item"> - </li>
-                                        <li class="list-inline-item"><i class="mdi mdi-clock-time-eight-outline me-1"></i>7H<span class="px-1">To</span>12H</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="my-1">
-                            <div class="d-flex align-items-start" id="tooltips-container">
-                                <div class="">
-                                    <i class="mdi mdi-circle h3 text-dark"></i>
-                                </div>
-                                 <div class="w-100 ms-2">
-                                    <h5 class="mb-1 mt-0">Ví dụ 5</h5>
-                                    <ul class="list-inline text-muted font-12">
-                                        <li class="list-inline-item"><i class="mdi mdi-calendar-blank-outline me-1"></i>16/08/2020</li>
-                                        <li class="list-inline-item"> - </li>
-                                        <li class="list-inline-item"><i class="mdi mdi-clock-time-eight-outline me-1"></i>7H<span class="px-1">To</span>12H</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </a>
                     </div>
                 </div>
                 </div>

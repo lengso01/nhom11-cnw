@@ -55,6 +55,13 @@
 					      <td><?=$result['birthday']?></td>
 					      <td><?=$result['address']?></td>
 					      <td><?=$result['email']?></td>
+					      <td>
+					      	<a class="btn btn-primary border-0" data-bs-toggle="modal" data-bs-target="#edit<?=$result['u_id'] ?>">
+							  <i class="fas fa-lock-open"></i>
+							</a>
+							<a href="#del<?=$result['u_id'] ?>" data-bs-toggle="modal" data-bs-target="#del<?=$result['u_id'] ?>" class="btn btn-danger border-0"><i class="far fa-trash-alt"></i></a>
+							<?php require_once "modal/modifyUser.php" ?>
+					      </td>
 					    </tr>
 
 					<?php	}
@@ -68,11 +75,11 @@
 		  	<table class="table">
 			  <thead>
 			    <tr>
-			      <th scope="col">id</th>
-			      <th scope="col">Tác giả</th>
-			      <th scope="col">Nội dung</th>
-			      <th scope="col">Ngày viết</th>
-			      <th scope="col">Trạng thái</th>
+			      <th scope="col" style="width:5%">id</th>
+			      <th scope="col" style="width:15%">Tác giả</th>
+			      <th scope="col" style="width:40%">Nội dung</th>
+			      <th scope="col" style="width:25%">Ngày viết</th>
+			      <th scope="col" style="width:15%">Trạng thái</th>
 
 			    </tr>
 			  </thead>
@@ -93,7 +100,7 @@
 					      	$sql2 = "SELECT * FROM usertable Where u_id = '$u_id'";
 					      	$query2 = mysqli_query($con,$sql2);
 							$num_rows2 = mysqli_num_rows($query2);
-							if ($num_rows>0){
+							if ($num_rows2>0){
 								$result2 = mysqli_fetch_assoc($query2);
 								if ($result2) {
 									echo $result2['name']; 
@@ -103,7 +110,7 @@
 
 					      </td>
 					      <td><?=$result['post_content']?></td>
-					      <td><?=$result['date']?></td>
+					      <td><?=$result['post_date']?></td>
 					      <td><?php
 					      	if($result['status'] == 0){
 					      		echo "Công khai";
@@ -150,7 +157,20 @@
 					      <td><?=$result['from_user_id']?></td>
 					      <td><?=$result['chat_message']?></td>
 					      <td><?=$result['timestamp']?></td>
-					      <td><?=$result['status']?></td>
+					      <td>
+					      	<?php 
+					      		if($result['status'] == 0){
+					      		echo "Công khai";
+					      		}elseif ($result['status'] == 1) {
+					      			echo "Bạn bè";
+					      		}else{
+					      			echo "Một mình tôi";
+					      		}
+					      		?>
+					      	?>
+					      	
+
+					      </td>
 
 					    </tr>
 
@@ -183,9 +203,19 @@
 					    <tr>	
 					      <th scope="row"><?=$i++?></th>
 					      <td><?=$result['u_id']?></td>
-					      <td><?=$result['content']?></td>
-					      <td><?=$result['date']?></td>
-					      <td><?=$result['status']?></td>
+					      <td><?=$result['sche_content']?></td>
+					      <td><?=$result['sche_date']?></td>
+					      <td>
+					      	<?php 
+					      		if($result['status'] == 0){
+					      		echo "Quan trọng";
+					      		}else{
+					      			echo "Bình thường";
+					      		}
+					      		?>
+					    
+					      	
+					      </td>
 					    </tr>
 
 					<?php	}
@@ -202,51 +232,51 @@
 </div>
 </div>
 	<!-- Modal -->
-			<div class="modal fade" id="userlogs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			  <div class="modal-dialog">
-			    <div class="modal-content border-0">
-			      <div class="modal-header">
-			        <h5 class="modal-title" id="exampleModalLabel">Logs người dùng</h5>
-			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			      </div>
-			      <div class="modal-body">
-			        <table class="table border-top-0">
-			        	<thead >
-						    <tr>
-						      <th scope="col">#</th>
-						      <th scope="col">Người dùng</th>
-						      <th scope="col">Hoạt động gần đây</th>
-						      <th scope="col">Trạng thái</th>
+	<div class="modal fade" id="userlogs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content border-0">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">Logs người dùng</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	        <table class="table border-top-0">
+	        	<thead >
+				    <tr>
+				      <th scope="col">#</th>
+				      <th scope="col">Người dùng</th>
+				      <th scope="col">Hoạt động gần đây</th>
+				      <th scope="col">Trạng thái</th>
 
-						    </tr>
-						  </thead>
-					  <tbody>
-					  	<?php $sql = "SELECT * FROM login_details" ;
-							$query = mysqli_query($con,$sql);
-							$num_rows = mysqli_num_rows($query);
-							$i = 1;
-							if ($num_rows>0) {
-								while ($result = mysqli_fetch_assoc($query)) { ?>
-							    <tr>	
-							      <th scope="row"><?=$i++?></th>
-							      <td><?=$result['user_id']?></td>
-							      <td><?=$result['last_activity']?></td>
-							      <td><?=$result['is_type']?></td>
-							    </tr>
+				    </tr>
+				  </thead>
+			  <tbody>
+			  	<?php $sql = "SELECT * FROM login_details" ;
+					$query = mysqli_query($con,$sql);
+					$num_rows = mysqli_num_rows($query);
+					$i = 1;
+					if ($num_rows>0) {
+						while ($result = mysqli_fetch_assoc($query)) { ?>
+					    <tr>	
+					      <th scope="row"><?=$i++?></th>
+					      <td><?=$result['user_id']?></td>
+					      <td><?=$result['last_activity']?></td>
+					      <td><?=$result['is_type']?></td>
+					    </tr>
 
-							<?php	}
-							}
-				        ?>
-			
-					  </tbody>
-					</table>
-			      </div>
-			      <div class="modal-footer">
-			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Xác nhận</button>
-			      </div>
-			    </div>
-			  </div>
-			</div>
+					<?php	}
+					}
+		        ?>
+	
+			  </tbody>
+			</table>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Xác nhận</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 <?php require_once "base/footer.php"; ?>
 
 
